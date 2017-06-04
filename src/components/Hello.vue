@@ -7,8 +7,8 @@
             :center="{lat: 41.8781, lng: -87.629798}"
             :zoom="12" :options="{styles: mapStyles}"
         >
-        <gmap-info-window :options="infoOptions" :position="infoWindowPos" v-if="infoWindowPos" :opened="infoWindowPos" :content="infoContent" @closeclick="infoWinOpen=false"></gmap-info-window>
-        <gmap-marker  :key="i" v-for="(m,i) in markers" :position="m.position" @click="infoWindowPos = m.position" ></gmap-marker>
+        <gmap-info-window :options="infoOptions" :position="infoWindowPos"v-if="infoWindowPos" :opened="infoWindowPos" :content="infoContent" @closeclick="infoWinOpen=false"></gmap-info-window>
+        <gmap-marker  :key="i" v-for="(m,i) in markers" :position="m.position" @click="infoWindowPos = m.position, infoContent = m.type + ': ' + m.description +  '<br/><br/>'+ ' Date: ' + m.date" ></gmap-marker>
         </gmap-map>
       </div>
     </div>
@@ -63,11 +63,11 @@ export default {
           position: {lat: parseFloat(e.latitude) , lng: parseFloat(e.longitude)},
           type: e.primary_type,
           description: e.description,
-          date: e.date
-        }
+          date: e.date.split('T').splice(0, 1)
+        } 
       })
       
-      this.markers = newData
+      this.markers = newData 
   
     })
     .catch(function(err) {
@@ -100,19 +100,7 @@ export default {
     }
   },
   methods: {
-    toggleInfoWindow: function(marker, idx) {
-      this.infoWindowPos = marker.position;
-      this.infoContent = marker.primary_type + " " + marker.description;
-      //check if its the same marker that was selected if yes toggle
-      if (this.currentMidx == idx) {
-        his.infoWinOpen = !this.infoWinOpen;
-      }
-      //if different marker set infowindow to open and reset current marker index
-      else {
-        this.infoWinOpen = true;
-        this.currentMidx = idx;
-      }
-    }
+   
   }
 }
 Vue.component('google-map', VueGoogleMaps.Map);
