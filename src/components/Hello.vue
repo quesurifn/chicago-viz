@@ -64,10 +64,10 @@ export default {
           type: e.primary_type,
           description: e.description,
           date: e.date.split('T').splice(0, 1)
-        }
+        } 
       })
       
-      this.markers = newData
+      this.markers = newData 
   
     })
     .catch(function(err) {
